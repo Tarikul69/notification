@@ -5,7 +5,6 @@ import 'dart:ui';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
 import 'package:palette_generator/palette_generator.dart';
 
 Future<void> main() async {
@@ -82,7 +81,7 @@ class NotificationController {
       // For background actions, you must hold the execution until the end
       print(
           'Message sent via notification input: "${receivedAction.buttonKeyInput}"');
-      await executeLongTaskInBackground();
+     // await executeLongTaskInBackground();
     } else {
       // this process is only necessary when you need to redirect the user
       // to a new page or use a valid context, since parallel isolates do not
@@ -179,14 +178,14 @@ class NotificationController {
   ///  *********************************************
   ///     BACKGROUND TASKS TEST
   ///  *********************************************
-  static Future<void> executeLongTaskInBackground() async {
-    print("starting long task");
-    await Future.delayed(const Duration(seconds: 4));
-    final url = Uri.parse("http://google.com");
-    final re = await http.get(url);
-    print(re.body);
-    print("long task done");
-  }
+  // static Future<void> executeLongTaskInBackground() async {
+  //   print("starting long task");
+  //   await Future.delayed(const Duration(seconds: 4));
+  //   final url = Uri.parse("http://google.com");
+  //   final re = await http.get(url);
+  //   print(re.body);
+  //   print("long task done");
+  // }
 
   ///  *********************************************
   ///     NOTIFICATION CREATION METHODS
@@ -199,44 +198,44 @@ class NotificationController {
 
     await AwesomeNotifications().createNotification(
         content: NotificationContent(
-            id: -1, // -1 is replaced by a random number
+            id: 0, // -1 is replaced by a random number
             channelKey: 'alerts',
-            title: 'Test abcd',
+            title: 'Test Notification',
             body: "Success.......",
             //bigPicture: 'https://storage.googleapis.com/cms-storage-bucket/d406c736e7c4c57f5f61.png',
             //largeIcon: 'https://storage.googleapis.com/cms-storage-bucket/0dbfcc7a59cd1cf16282.png',
             //'asset://assets/images/balloons-in-sky.jpg',
             //notificationLayout: NotificationLayout.BigPicture,
-            payload: {'notificationId': '1234567890'}),
+            payload: {'notificationId': ''}),
         actionButtons: [
-          NotificationActionButton(key: 'REDIRECT', label: 'Redirect'),
-          NotificationActionButton(
-              key: 'REPLY',
-              label: 'Reply Message',
-              requireInputText: true,
-              actionType: ActionType.SilentAction),
-          NotificationActionButton(
-              key: 'DISMISS',
-              label: 'Dismiss',
-              actionType: ActionType.DismissAction,
-              isDangerousOption: true)
+          // NotificationActionButton(key: 'REDIRECT', label: 'Redirect'),
+          // NotificationActionButton(
+          //     key: 'REPLY',
+          //     label: 'Reply Message',
+          //     requireInputText: true,
+          //     actionType: ActionType.SilentAction),
+          // NotificationActionButton(
+          //     key: 'DISMISS',
+          //     label: 'Dismiss',
+          //     actionType: ActionType.DismissAction,
+          //     isDangerousOption: true)
         ]);
   }
 
-  static Future<void> scheduleNewNotification() async {
-    bool isAllowed = await AwesomeNotifications().isNotificationAllowed();
-    if (!isAllowed) isAllowed = await displayNotificationRationale();
-    if (!isAllowed) return;
-
-    await myNotifyScheduleInHours(
-        title: 'test',
-        msg: 'test message',
-        heroThumbUrl:
-        'https://storage.googleapis.com/cms-storage-bucket/d406c736e7c4c57f5f61.png',
-        hoursFromNow: 5,
-        username: 'test user',
-        repeatNotif: false);
-  }
+  // static Future<void> scheduleNewNotification() async {
+  //   bool isAllowed = await AwesomeNotifications().isNotificationAllowed();
+  //   if (!isAllowed) isAllowed = await displayNotificationRationale();
+  //   if (!isAllowed) return;
+  //
+  //   await myNotifyScheduleInHours(
+  //       title: 'test',
+  //       msg: 'test message',
+  //       heroThumbUrl:
+  //       'https://storage.googleapis.com/cms-storage-bucket/d406c736e7c4c57f5f61.png',
+  //       hoursFromNow: 5,
+  //       username: 'test user',
+  //       repeatNotif: false);
+  // }
 
   static Future<void> resetBadgeCounter() async {
     await AwesomeNotifications().resetGlobalBadge();
@@ -259,21 +258,21 @@ Future<void> myNotifyScheduleInHours({
   await AwesomeNotifications().createNotification(
     schedule: NotificationCalendar(
       //weekday: nowDate.day,
-      hour: nowDate.hour,
-      minute: 0,
-      second: nowDate.second,
-      repeats: repeatNotif,
+      //hour: nowDate.hour,
+      //minute: 0,
+    //  second: nowDate.second,
+     // repeats: repeatNotif,
       //allowWhileIdle: true,
     ),
     // schedule: NotificationCalendar.fromDate(
     //    date: DateTime.now().add(const Duration(seconds: 10))),
     content: NotificationContent(
-      id: -1,
+      id: 0,
       channelKey: 'basic_channel',
       title: '${Emojis.food_bowl_with_spoon} $title',
       body: '$username, $msg',
       bigPicture: heroThumbUrl,
-      notificationLayout: NotificationLayout.BigPicture,
+      //notificationLayout: NotificationLayout.BigPicture,
       //actionType : ActionType.DismissAction,
       color: Colors.black,
       backgroundColor: Colors.black,
@@ -400,7 +399,7 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             const SizedBox(width: 20),
             FloatingActionButton(
-              heroTag: '1',
+              heroTag: '0',
               onPressed: () => NotificationController.createNewNotification(),
               tooltip: 'Create New notification',
               child: const Icon(Icons.outgoing_mail),
@@ -568,8 +567,7 @@ class NotificationPageState extends State<NotificationPage> {
                           borderRadius: BorderRadius.all(
                               Radius.circular(largeIconSize)),
                           child: FadeInImage(
-                            placeholder: const NetworkImage(
-                                'https://cdn.syncfusion.com/content/images/common/placeholder.gif'),
+                            placeholder: const AssetImage("jfjhr"),
                             image: widget.receivedAction.largeIconImage!,
                             fit: BoxFit.cover,
                           ),
@@ -583,8 +581,7 @@ class NotificationPageState extends State<NotificationPage> {
                   ? Padding(
                 padding: EdgeInsets.only(bottom: hasLargeIcon ? 60 : 20),
                 child: FadeInImage(
-                  placeholder: const NetworkImage(
-                      'https://cdn.syncfusion.com/content/images/common/placeholder.gif'),
+                  placeholder: const AssetImage("assetName"),
                   height: bigPictureSize,
                   width: MediaQuery.of(context).size.width,
                   image: widget.receivedAction.bigPictureImage!,
